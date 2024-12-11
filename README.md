@@ -179,5 +179,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Contact
 
 For questions and support, please contact:
-- Email: your.email@example.com
-- GitHub Issues: [Create an issue](https://github.com/yourusername/ml_production_system/issues) 
+- Email: Beka.kakachia777@gmail.com
