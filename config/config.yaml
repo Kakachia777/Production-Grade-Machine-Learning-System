@@ -1,0 +1,115 @@
+experiment_name: "production_ml_system"
+
+# Data configuration
+data:
+  data_path: "data/raw/dataset.csv"
+  feature_columns:
+    - "feature1"
+    - "feature2"
+    - "feature3"
+  target_column: "target"
+  test_size: 0.2
+  validation:
+    min_value: -1000
+    max_value: 1000
+  feature_engineering:
+    - type: "polynomial"
+      columns: ["feature1", "feature2"]
+      degree: 2
+    - type: "interaction"
+      columns: [["feature1", "feature2"], ["feature2", "feature3"]]
+
+# Model configuration
+model:
+  input_size: 3
+  hidden_sizes: [64, 32, 16]
+  output_size: 1
+  save_path: "models/trained"
+
+# Training configuration
+training:
+  batch_size: 32
+  learning_rate: 0.001
+  epochs: 100
+  early_stopping:
+    patience: 10
+    min_delta: 0.001
+  optimizer:
+    name: "adam"
+    weight_decay: 0.0001
+  scheduler:
+    name: "reduce_lr_on_plateau"
+    patience: 5
+    factor: 0.5
+
+# MLflow configuration
+mlflow:
+  tracking_uri: "http://localhost:5000"
+  experiment_name: ${experiment_name}
+  tags:
+    environment: "production"
+    model_type: "deep_learning"
+
+# Weights & Biases configuration
+wandb:
+  project_name: ${experiment_name}
+  entity: "your_username"
+  tags:
+    - "production"
+    - "deep_learning"
+
+# Logging configuration
+logging:
+  level: "INFO"
+  use_json: false
+  use_colors: true
+  log_file: "logs/training.log"
+
+# Monitoring configuration
+monitoring:
+  prometheus:
+    host: "localhost"
+    port: 9090
+  metrics:
+    - "accuracy"
+    - "loss"
+    - "inference_time"
+    - "memory_usage"
+  alerts:
+    accuracy_threshold: 0.95
+    latency_threshold_ms: 100
+
+# Deployment configuration
+deployment:
+  kubernetes:
+    namespace: "ml-production"
+    replicas: 3
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+  endpoints:
+    prediction: "/api/v1/predict"
+    health: "/health"
+    metrics: "/metrics"
+  
+# Testing configuration
+testing:
+  unit_test_path: "tests/unit"
+  integration_test_path: "tests/integration"
+  performance_test_path: "tests/performance"
+  test_data_path: "data/test"
+  coverage_threshold: 80
+
+# Security configuration
+security:
+  api_key_required: true
+  rate_limiting:
+    requests_per_minute: 100
+    burst: 20
+  cors:
+    allowed_origins: ["https://your-domain.com"]
+    allowed_methods: ["GET", "POST"] 
